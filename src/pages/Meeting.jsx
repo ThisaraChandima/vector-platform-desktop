@@ -206,15 +206,16 @@ function MeetingContent() {
         // When another user announces themselves
         channel.on('broadcast', { event: 'user-joined' }, async (msg) => {
           const { sender } = msg.payload;
-          if (sender === myUserId) return; // Ignore own messages
+          if (sender === myUserId) return;
           
-          console.log(`[Signal] User joined: ${sender}, I will create offer`);
+          console.log(`[Signal] User joined: ${sender}`);
           setConnectionStatus('connecting');
           
-          const pc = createPeer(sender, stream, channel);
-          
-          // Only create offer if we don't already have one in progress
-          if (!pc.localDescription) {
+          // GLARE FIX: Only the user with the LOWER ID creates the offer.
+          // This prevents both sides from creating offers simultaneously.
+          if (myUserId < sender) {
+            console.log(`[Signal] I am initiator (${myUserId} < ${sender}), creating offer`);
+            const pc = createPeer(sender, stream, channel);
             try {
               const offer = await pc.createOffer();
               await pc.setLocalDescription(offer);
@@ -227,6 +228,8 @@ function MeetingContent() {
             } catch (e) {
               console.error(`[Signal] Failed to create offer for ${sender}:`, e);
             }
+          } else {
+            console.log(`[Signal] I am responder (${myUserId} > ${sender}), waiting for offer`);
           }
         });
 
@@ -241,10 +244,16 @@ function MeetingContent() {
 
           try {
             if (offer) {
-              // We received an offer — set it and send an answer
-              if (pc.signalingState !== 'stable') {
-                console.warn(`[Signal] Ignoring offer, signaling state is ${pc.signalingState}`);
-                return;
+              // We received an offer
+              if (pc.signalingState === 'have-local-offer') {
+                // GLARE: Both sides sent offers. The side with the higher ID rolls back.
+                if (myUserId > sender) {
+                  console.log(`[Signal] Glare detected! Rolling back my offer and accepting theirs.`);
+                  await pc.setLocalDescription({ type: 'rollback' });
+                } else {
+                  console.log(`[Signal] Glare detected! Ignoring their offer (I have priority).`);
+                  return;
+                }
               }
               await pc.setRemoteDescription(new RTCSessionDescription(offer));
               const ans = await pc.createAnswer();
@@ -256,19 +265,15 @@ function MeetingContent() {
               });
               console.log(`[Signal] Sent answer to ${sender}`);
             } else if (answer) {
-              // We received an answer to our offer
               if (pc.signalingState === 'have-local-offer') {
                 await pc.setRemoteDescription(new RTCSessionDescription(answer));
                 console.log(`[Signal] Set remote answer from ${sender}`);
               }
             } else if (candidate) {
-              // We received an ICE candidate
-              if (pc.remoteDescription) {
+              try {
                 await pc.addIceCandidate(new RTCIceCandidate(candidate));
-              } else {
-                // Queue candidate — it will be processed when remoteDescription is set
-                console.log(`[Signal] Queuing ICE candidate (no remote desc yet)`);
-                // RTCPeerConnection will handle this automatically in most browsers
+              } catch (iceErr) {
+                console.warn(`[Signal] ICE candidate error (will retry):`, iceErr.message);
               }
             }
           } catch (e) {
