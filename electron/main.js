@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain, desktopCapturer } from 'electron';
+import { app, BrowserWindow, ipcMain, desktopCapturer, dialog } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
@@ -41,9 +42,30 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
 
+  // Check for updates (will be ignored if not packaged)
+  autoUpdater.checkForUpdatesAndNotify();
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
+    }
+  });
+});
+
+// Auto Updater Events
+autoUpdater.on('update-available', () => {
+  console.log('Update available.');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    title: 'Update Ready',
+    message: 'A new version of Vector Platform has been downloaded. Restart the application to apply the updates.',
+    buttons: ['Restart', 'Later']
+  }).then((returnValue) => {
+    if (returnValue.response === 0) {
+      autoUpdater.quitAndInstall();
     }
   });
 });
