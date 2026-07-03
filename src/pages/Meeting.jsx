@@ -261,7 +261,7 @@ function MeetingContent() {
 
     if (endForAll) {
       try {
-        await fetch(`/api/meetings/active?teamId=${teamId}`, { method: 'DELETE' });
+        await fetch(`https://vector-platform-two.vercel.app/api/meetings/active?teamId=${teamId}`, { method: 'DELETE' });
         const channel = supabase.channel(`meeting-status-${teamId}`);
         channel.subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
@@ -295,7 +295,7 @@ function MeetingContent() {
         toast.success("Upload complete! Analyzing secretly...", { id: 'transcribe' });
 
         // Let the web backend analyze AND save it
-        const analyzeRes = await fetch('/api/meetings/analyze', {
+        const analyzeRes = await fetch('https://vector-platform-two.vercel.app/api/meetings/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ teamId, transcript: transcribeData.text }),

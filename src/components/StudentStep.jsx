@@ -6,7 +6,7 @@ export default function StudentStep({ student, team }) {
 
   useEffect(() => {
     if (!team) return;
-    fetch('/api/meetings')
+    fetch('https://vector-platform-two.vercel.app/api/meetings')
       .then(res => res.json())
       .then(data => {
         if (data.success) {

@@ -21,24 +21,24 @@ function StudentTasksContent() {
     if (!studentId) return;
     setIsLoading(true);
     try {
-      const stRes = await fetch('/api/students/' + studentId);
+      const stRes = await fetch('https://vector-platform-two.vercel.app/api/students/' + studentId);
       const stData = await stRes.json();
       setStudent(stData.data);
 
       if (stData.data?.teamId) {
         // fetch team members
-        const tmRes = await fetch('/api/teams?populate=true');
+        const tmRes = await fetch('https://vector-platform-two.vercel.app/api/teams?populate=true');
         const tmData = await tmRes.json();
         const team = tmData.data.find(t => t.id === stData.data.teamId);
         if (team) setTeamMembers(team.members);
 
         // fetch tasks
-        const tkRes = await fetch(`/api/tasks?teamId=${stData.data.teamId}`);
+        const tkRes = await fetch(`https://vector-platform-two.vercel.app/api/tasks?teamId=${stData.data.teamId}`);
         const tkData = await tkRes.json();
         setTasks(tkData.data || []);
 
         // fetch votes
-        const vtRes = await fetch(`/api/votes?teamId=${stData.data.teamId}`);
+        const vtRes = await fetch(`https://vector-platform-two.vercel.app/api/votes?teamId=${stData.data.teamId}`);
         const vtData = await vtRes.json();
         setVotes(vtData.data || []);
       }
@@ -58,7 +58,7 @@ function StudentTasksContent() {
 
   const handleAssign = async (taskId, assigneeId) => {
     try {
-      const res = await fetch('/api/tasks/assign', {
+      const res = await fetch('https://vector-platform-two.vercel.app/api/tasks/assign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId, studentId: assigneeId })
@@ -68,7 +68,7 @@ function StudentTasksContent() {
       if (!data.success) {
         if (data.data?.suggestVote) {
           if (confirm(`Capacity error: ${data.error}\n\nWould you like to initiate a democratic vote to reassign this task?`)) {
-            await fetch('/api/votes', {
+            await fetch('https://vector-platform-two.vercel.app/api/votes', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -97,7 +97,7 @@ function StudentTasksContent() {
 
   const handleTransfer = async (taskId, fromId, toId, reason) => {
     try {
-      const res = await fetch('/api/tasks/transfer', {
+      const res = await fetch('https://vector-platform-two.vercel.app/api/tasks/transfer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId, fromStudentId: fromId, toStudentId: toId, reason })
@@ -116,7 +116,7 @@ function StudentTasksContent() {
 
   const handleVote = async (voteId, vote) => {
     try {
-      await fetch('/api/votes', {
+      await fetch('https://vector-platform-two.vercel.app/api/votes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'cast', voteId, voterId: studentId, vote })

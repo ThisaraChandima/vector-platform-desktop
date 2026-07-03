@@ -19,10 +19,10 @@ export default function AdminDashboard() {
     setIsLoading(true);
     try {
       const [stRes, tmRes, logsRes, meetRes] = await Promise.all([
-        fetch('/api/students'),
-        fetch('/api/teams?populate=true'),
-        fetch('/api/logs'),
-        fetch('/api/meetings')
+        fetch('https://vector-platform-two.vercel.app/api/students'),
+        fetch('https://vector-platform-two.vercel.app/api/teams?populate=true'),
+        fetch('https://vector-platform-two.vercel.app/api/logs'),
+        fetch('https://vector-platform-two.vercel.app/api/meetings')
       ]);
       const stData = await stRes.json();
       const tmData = await tmRes.json();
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
   const handleFormTeams = async () => {
     setIsForming(true);
     try {
-      const res = await fetch('/api/teams/form', {
+      const res = await fetch('https://vector-platform-two.vercel.app/api/teams/form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ teamSize: 4 })

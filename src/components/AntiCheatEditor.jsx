@@ -137,7 +137,7 @@ export default function AntiCheatEditor({ studentId, teamId, taskId }) {
 
   const logAction = async (type, details, flagged = false, preview = '') => {
     try {
-      await fetch('/api/logs', {
+      await fetch('https://vector-platform-two.vercel.app/api/logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

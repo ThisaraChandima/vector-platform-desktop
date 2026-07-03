@@ -43,7 +43,7 @@ export default function AudioUploader({ teamId, onAnalysisComplete }) {
   const submitAnalysis = async () => {
     setIsProcessing(true);
     try {
-      const res = await fetch('/api/meetings/analyze', {
+      const res = await fetch('https://vector-platform-two.vercel.app/api/meetings/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ teamId, transcript, audioFilename: 'meeting_audio.wav' })

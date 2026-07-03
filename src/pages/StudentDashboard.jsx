@@ -30,7 +30,7 @@ function StudentDashboardContent() {
       setIsLoading(true);
       try {
         // Fetch all students to find the first one if no id is provided
-        const stRes = await fetch('/api/students');
+        const stRes = await fetch('https://vector-platform-two.vercel.app/api/students');
         const stData = await stRes.json();
         
         let currentStudent = null;
@@ -56,12 +56,12 @@ function StudentDashboardContent() {
         setStudent(currentStudent);
 
         if (currentStudent && currentStudent.teamId) {
-          const tmRes = await fetch('/api/teams?populate=true');
+          const tmRes = await fetch('https://vector-platform-two.vercel.app/api/teams?populate=true');
           const tmData = await tmRes.json();
           const currentTeam = tmData.data.find(t => t.id === currentStudent.teamId);
           setTeam(currentTeam);
           
-          const tkRes = await fetch(`/api/tasks?teamId=${currentStudent.teamId}`);
+          const tkRes = await fetch(`https://vector-platform-two.vercel.app/api/tasks?teamId=${currentStudent.teamId}`);
           const tkData = await tkRes.json();
           setTasks(tkData.data || []);
         }
@@ -79,7 +79,7 @@ function StudentDashboardContent() {
     // Poll for active meetings as a fallback
     const checkActiveMeetings = async () => {
       try {
-        const res = await fetch(`/api/meetings/active?teamId=${team.id}`);
+        const res = await fetch(`https://vector-platform-two.vercel.app/api/meetings/active?teamId=${team.id}`);
         const data = await res.json();
         // Only update if we don't already have one set by realtime
         setLiveMeeting(prev => {
@@ -126,7 +126,7 @@ function StudentDashboardContent() {
     if (meetingNameInput.trim()) {
       // Register meeting as active via API and Realtime
       try {
-        await fetch('/api/meetings/active', {
+        await fetch('https://vector-platform-two.vercel.app/api/meetings/active', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ teamId: team.id, name: meetingNameInput })

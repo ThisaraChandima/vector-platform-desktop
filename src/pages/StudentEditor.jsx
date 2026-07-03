@@ -21,7 +21,7 @@ function StudentEditorContent() {
       }
       setIsLoading(true);
       try {
-        const stRes = await fetch('/api/students/' + studentId);
+        const stRes = await fetch('https://vector-platform-two.vercel.app/api/students/' + studentId);
         const stData = await stRes.json();
         
         if (stData.success && stData.data) {
