@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect, Suspense } from 'react';
+import { useState, useRef, useEffect, useCallback, Suspense } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import NavBar from '@/components/NavBar';
@@ -8,6 +8,33 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://example.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'dummy-key';
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// ICE server configuration with multiple STUN servers and free TURN relays
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    { urls: 'stun:stun4.l.google.com:19302' },
+    {
+      urls: 'turn:openrelay.metered.ca:80',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    }
+  ],
+  iceCandidatePoolSize: 10
+};
 
 function MeetingContent() {
   const params = useParams();
@@ -25,6 +52,8 @@ function MeetingContent() {
   const [remoteStreams, setRemoteStreams] = useState({});
   const [isVideoOff, setIsVideoOff] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('connecting'); // connecting | waiting | connected | failed
+  const [channelReady, setChannelReady] = useState(false);
 
   const localVideoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -36,6 +65,8 @@ function MeetingContent() {
   const myUserId = useRef(Math.random().toString(36).substring(7)).current;
   const channelRef = useRef(null);
   const peersRef = useRef({});
+  const heartbeatRef = useRef(null);
+  const activeRef = useRef(true);
 
   const startRecording = (mixedStream) => {
     try {
@@ -58,20 +89,100 @@ function MeetingContent() {
     }
   };
 
+  // Create or retrieve a peer connection for a given remote user
+  const createPeer = useCallback((targetUserId, stream, channel) => {
+    // If we already have a healthy connection to this peer, reuse it
+    if (peersRef.current[targetUserId]) {
+      const existing = peersRef.current[targetUserId];
+      if (existing.connectionState !== 'failed' && existing.connectionState !== 'closed') {
+        return existing;
+      }
+      // Close the broken one
+      existing.close();
+      delete peersRef.current[targetUserId];
+    }
+    
+    console.log(`[WebRTC] Creating peer connection for ${targetUserId}`);
+    const pc = new RTCPeerConnection(ICE_SERVERS);
+
+    // Add all local tracks to the connection
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+    // Send ICE candidates IMMEDIATELY (no batching)
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        console.log(`[WebRTC] Sending ICE candidate to ${targetUserId}`);
+        channel.send({
+          type: 'broadcast',
+          event: 'signal',
+          payload: { target: targetUserId, sender: myUserId, candidate: event.candidate.toJSON() }
+        });
+      }
+    };
+
+    // Handle incoming remote tracks
+    pc.ontrack = (event) => {
+      console.log(`[WebRTC] Received remote track from ${targetUserId}`);
+      const rStream = event.streams[0];
+      setRemoteStreams(prev => ({ ...prev, [targetUserId]: rStream }));
+      setConnectionStatus('connected');
+      
+      // Mix remote audio into the recording destination
+      if (audioContextRef.current && audioDestRef.current && rStream.getAudioTracks().length > 0) {
+        try {
+          const remoteSource = audioContextRef.current.createMediaStreamSource(rStream);
+          remoteSource.connect(audioDestRef.current);
+        } catch (e) {
+          console.warn('[WebRTC] Could not mix remote audio:', e);
+        }
+      }
+    };
+    
+    // Monitor connection state changes
+    pc.oniceconnectionstatechange = () => {
+      console.log(`[WebRTC] ICE state for ${targetUserId}: ${pc.iceConnectionState}`);
+      
+      if (pc.iceConnectionState === 'connected' || pc.iceConnectionState === 'completed') {
+        setConnectionStatus('connected');
+      } else if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
+        console.warn(`[WebRTC] Connection ${pc.iceConnectionState} for ${targetUserId}`);
+        setRemoteStreams(prev => {
+          const newStreams = { ...prev };
+          delete newStreams[targetUserId];
+          return newStreams;
+        });
+        pc.close();
+        delete peersRef.current[targetUserId];
+        
+        // Check if we have any remaining connections
+        if (Object.keys(peersRef.current).length === 0) {
+          setConnectionStatus('waiting');
+        }
+      }
+    };
+
+    pc.onconnectionstatechange = () => {
+      console.log(`[WebRTC] Connection state for ${targetUserId}: ${pc.connectionState}`);
+    };
+
+    peersRef.current[targetUserId] = pc;
+    return pc;
+  }, [myUserId]);
+
   useEffect(() => {
-    let active = true;
+    activeRef.current = true;
     
     const initWebRTC = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        if (!active) return;
+        if (!activeRef.current) return;
         
         localStreamRef.current = stream;
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
 
-        // Setup audio mixing
+        // Setup audio mixing for recording
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         audioContextRef.current = audioCtx;
         const dest = audioCtx.createMediaStreamDestination();
@@ -90,160 +201,147 @@ function MeetingContent() {
         });
         channelRef.current = channel;
 
-        const createPeer = (targetUserId, initiator = false) => {
-          if (peersRef.current[targetUserId]) return peersRef.current[targetUserId];
-          
-          const pc = new RTCPeerConnection({
-            iceServers: [
-              { urls: 'stun:stun.l.google.com:19302' },
-              {
-                urls: 'turn:openrelay.metered.ca:80',
-                username: 'openrelayproject',
-                credential: 'openrelayproject'
-              },
-              {
-                urls: 'turn:openrelay.metered.ca:443',
-                username: 'openrelayproject',
-                credential: 'openrelayproject'
-              },
-              {
-                urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-                username: 'openrelayproject',
-                credential: 'openrelayproject'
-              }
-            ]
-          });
+        // --- SIGNALING HANDLERS ---
 
-          stream.getTracks().forEach(track => pc.addTrack(track, stream));
-
-          let iceBuffer = [];
-          let iceTimeout = null;
-
-          pc.onicecandidate = (event) => {
-            if (event.candidate) {
-              iceBuffer.push(event.candidate);
-              if (!iceTimeout) {
-                iceTimeout = setTimeout(() => {
-                  channel.send({
-                    type: 'broadcast',
-                    event: 'signal',
-                    payload: { target: targetUserId, sender: myUserId, candidates: iceBuffer }
-                  });
-                  iceBuffer = [];
-                  iceTimeout = null;
-                }, 300);
-              }
-            }
-          };
-
-          pc.ontrack = (event) => {
-            const rStream = event.streams[0];
-            setRemoteStreams(prev => ({ ...prev, [targetUserId]: rStream }));
-            
-            // Mix remote audio into the recording destination
-            if (audioContextRef.current && audioDestRef.current && rStream.getAudioTracks().length > 0) {
-              const remoteSource = audioContextRef.current.createMediaStreamSource(rStream);
-              remoteSource.connect(audioDestRef.current);
-            }
-          };
-          
-          pc.oniceconnectionstatechange = () => {
-            if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
-               setRemoteStreams(prev => {
-                 const newStreams = { ...prev };
-                 delete newStreams[targetUserId];
-                 return newStreams;
-               });
-               delete peersRef.current[targetUserId];
-            }
-          };
-
-          peersRef.current[targetUserId] = pc;
-          return pc;
-        };
-
+        // When another user announces themselves
         channel.on('broadcast', { event: 'user-joined' }, async (msg) => {
           const { sender } = msg.payload;
-          const pc = createPeer(sender, true);
-          const offer = await pc.createOffer();
-          await pc.setLocalDescription(offer);
-          channel.send({
-            type: 'broadcast',
-            event: 'signal',
-            payload: { target: sender, sender: myUserId, offer }
-          });
-        });
-
-        channel.on('broadcast', { event: 'signal' }, async (msg) => {
-          const { target, sender, offer, answer, candidate, candidates } = msg.payload;
-          if (target !== myUserId) return;
-
-          const pc = createPeer(sender);
-
-          if (offer) {
-            await pc.setRemoteDescription(new RTCSessionDescription(offer));
-            const ans = await pc.createAnswer();
-            await pc.setLocalDescription(ans);
-            channel.send({
-              type: 'broadcast',
-              event: 'signal',
-              payload: { target: sender, sender: myUserId, answer: ans }
-            });
-          } else if (answer) {
-            await pc.setRemoteDescription(new RTCSessionDescription(answer));
-          } else if (candidate) {
+          if (sender === myUserId) return; // Ignore own messages
+          
+          console.log(`[Signal] User joined: ${sender}, I will create offer`);
+          setConnectionStatus('connecting');
+          
+          const pc = createPeer(sender, stream, channel);
+          
+          // Only create offer if we don't already have one in progress
+          if (!pc.localDescription) {
             try {
-              await pc.addIceCandidate(new RTCIceCandidate(candidate));
+              const offer = await pc.createOffer();
+              await pc.setLocalDescription(offer);
+              channel.send({
+                type: 'broadcast',
+                event: 'signal',
+                payload: { target: sender, sender: myUserId, offer: pc.localDescription.toJSON() }
+              });
+              console.log(`[Signal] Sent offer to ${sender}`);
             } catch (e) {
-              console.error(e);
-            }
-          } else if (candidates) {
-            for (let c of candidates) {
-              try {
-                await pc.addIceCandidate(new RTCIceCandidate(c));
-              } catch (e) {
-                console.error(e);
-              }
+              console.error(`[Signal] Failed to create offer for ${sender}:`, e);
             }
           }
         });
 
+        // Handle signaling messages (offers, answers, ICE candidates)
+        channel.on('broadcast', { event: 'signal' }, async (msg) => {
+          const { target, sender, offer, answer, candidate } = msg.payload;
+          if (target !== myUserId) return; // Not for us
+
+          console.log(`[Signal] Received ${offer ? 'offer' : answer ? 'answer' : 'candidate'} from ${sender}`);
+
+          const pc = createPeer(sender, stream, channel);
+
+          try {
+            if (offer) {
+              // We received an offer — set it and send an answer
+              if (pc.signalingState !== 'stable') {
+                console.warn(`[Signal] Ignoring offer, signaling state is ${pc.signalingState}`);
+                return;
+              }
+              await pc.setRemoteDescription(new RTCSessionDescription(offer));
+              const ans = await pc.createAnswer();
+              await pc.setLocalDescription(ans);
+              channel.send({
+                type: 'broadcast',
+                event: 'signal',
+                payload: { target: sender, sender: myUserId, answer: pc.localDescription.toJSON() }
+              });
+              console.log(`[Signal] Sent answer to ${sender}`);
+            } else if (answer) {
+              // We received an answer to our offer
+              if (pc.signalingState === 'have-local-offer') {
+                await pc.setRemoteDescription(new RTCSessionDescription(answer));
+                console.log(`[Signal] Set remote answer from ${sender}`);
+              }
+            } else if (candidate) {
+              // We received an ICE candidate
+              if (pc.remoteDescription) {
+                await pc.addIceCandidate(new RTCIceCandidate(candidate));
+              } else {
+                // Queue candidate — it will be processed when remoteDescription is set
+                console.log(`[Signal] Queuing ICE candidate (no remote desc yet)`);
+                // RTCPeerConnection will handle this automatically in most browsers
+              }
+            }
+          } catch (e) {
+            console.error(`[Signal] Error handling signal from ${sender}:`, e);
+          }
+        });
+
+        // Handle meeting-ended broadcast
+        channel.on('broadcast', { event: 'meeting-ended' }, () => {
+          if (!isHost && activeRef.current) {
+            toast('Host ended the meeting. Processing audio...', { icon: 'ℹ️' });
+            endMeeting(false);
+          }
+        });
+
+        // Subscribe to channel and start heartbeat
         channel.subscribe((status) => {
+          console.log(`[Supabase] Channel status: ${status}`);
           if (status === 'SUBSCRIBED') {
+            setChannelReady(true);
+            setConnectionStatus('waiting');
+            
+            // Broadcast our presence immediately
             channel.send({
               type: 'broadcast',
               event: 'user-joined',
               payload: { sender: myUserId }
             });
-          }
-        });
 
-        channel.on('broadcast', { event: 'meeting-ended' }, () => {
-          if (!isHost && active) {
-             toast('Host ended the meeting. Processing audio...', { icon: 'ℹ️' });
-             endMeeting(false);
+            // HEARTBEAT: Re-broadcast every 3 seconds for 60 seconds
+            // This ensures late joiners discover us
+            let heartbeatCount = 0;
+            heartbeatRef.current = setInterval(() => {
+              heartbeatCount++;
+              if (heartbeatCount > 20) { // Stop after 60 seconds (20 * 3s)
+                clearInterval(heartbeatRef.current);
+                return;
+              }
+              channel.send({
+                type: 'broadcast',
+                event: 'user-joined',
+                payload: { sender: myUserId }
+              });
+            }, 3000);
+          } else if (status === 'CHANNEL_ERROR') {
+            console.error('[Supabase] Channel error');
+            setConnectionStatus('failed');
+            toast.error('Failed to connect to meeting server. Please try again.');
           }
         });
 
       } catch (err) {
         console.error("Media access error", err);
-        toast.error("Could not access camera/microphone");
+        toast.error("Could not access camera/microphone. Please check permissions.");
+        setConnectionStatus('failed');
       }
     };
 
     initWebRTC();
 
     return () => {
-      active = false;
+      activeRef.current = false;
+      if (heartbeatRef.current) clearInterval(heartbeatRef.current);
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(t => t.stop());
       }
       Object.values(peersRef.current).forEach(pc => pc.close());
+      peersRef.current = {};
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
       }
     };
-  }, [teamId]);
+  }, [teamId, createPeer]);
 
   const toggleMute = () => {
     if (localStreamRef.current) {
@@ -262,6 +360,24 @@ function MeetingContent() {
         videoTrack.enabled = !videoTrack.enabled;
         setIsVideoOff(!videoTrack.enabled);
       }
+    }
+  };
+
+  // Force reconnect: close all peers and re-announce
+  const reconnect = () => {
+    console.log('[WebRTC] Manual reconnect triggered');
+    Object.values(peersRef.current).forEach(pc => pc.close());
+    peersRef.current = {};
+    setRemoteStreams({});
+    setConnectionStatus('waiting');
+    
+    if (channelRef.current) {
+      channelRef.current.send({
+        type: 'broadcast',
+        event: 'user-joined',
+        payload: { sender: myUserId }
+      });
+      toast.success('Reconnecting... waiting for teammates.');
     }
   };
 
@@ -374,6 +490,15 @@ function MeetingContent() {
   else if (totalParticipants === 3 || totalParticipants === 4) gridClass = "grid-cols-2";
   else if (totalParticipants > 4) gridClass = "grid-cols-2 md:grid-cols-3";
 
+  // Connection status display
+  const statusConfig = {
+    connecting: { text: 'Connecting to meeting server...', color: 'text-amber-400', dot: 'bg-amber-400 animate-pulse' },
+    waiting: { text: 'Waiting for teammates to join...', color: 'text-blue-400', dot: 'bg-blue-400 animate-pulse' },
+    connected: { text: `Connected • ${remoteStreamEntries.length} teammate${remoteStreamEntries.length !== 1 ? 's' : ''}`, color: 'text-emerald-400', dot: 'bg-emerald-400' },
+    failed: { text: 'Connection failed', color: 'text-rose-400', dot: 'bg-rose-400' },
+  };
+  const currentStatus = statusConfig[connectionStatus] || statusConfig.connecting;
+
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col font-sans">
       <NavBar role="student" user={{ name: 'Current User' }} />
@@ -382,10 +507,26 @@ function MeetingContent() {
         <div className="mb-6 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-white">Live: {meetingName}</h1>
-            <p className="text-slate-400 mt-1">N-Way Video Space for Team {teamId.substring(0,6).toUpperCase()}</p>
+            <div className="flex items-center gap-3 mt-2">
+              <p className="text-slate-400">N-Way Video Space for Team {teamId.substring(0,6).toUpperCase()}</p>
+              <span className="text-slate-600">•</span>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${currentStatus.dot}`}></div>
+                <span className={`text-sm font-medium ${currentStatus.color}`}>{currentStatus.text}</span>
+              </div>
+            </div>
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex gap-3">
+            {(connectionStatus === 'waiting' || connectionStatus === 'failed') && (
+              <button 
+                onClick={reconnect}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-all flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Reconnect
+              </button>
+            )}
             <button 
               onClick={() => {
                 if (isRecording) endMeeting(isHost);
