@@ -5,6 +5,7 @@ import TeamCard from '@/components/TeamCard';
 import StudentProfileCard from '@/components/StudentProfileCard';
 import OverrideModal from '@/components/OverrideModal';
 import { toast } from 'react-hot-toast';
+import { deleteRecord } from '@/lib/db';
 
 export default function AdminDashboard() {
   const [students, setStudents] = useState([]);
@@ -66,6 +67,19 @@ export default function AdminDashboard() {
       toast.error('Failed to form teams');
     }
     setIsForming(false);
+  };
+
+  const handleDeleteMeeting = async (meetingId) => {
+    if (window.confirm("Are you sure you want to delete this meeting transcript?")) {
+      try {
+        await deleteRecord('meetings', meetingId);
+        toast.success("Meeting deleted successfully!");
+        setMeetings(prev => prev.filter(m => m.id !== meetingId));
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to delete meeting.");
+      }
+    }
   };
 
   const handleOverrideSave = async (teamId, newStudentId) => {
@@ -250,16 +264,25 @@ export default function AdminDashboard() {
                     </div>
                   )}
 
-                  <button 
-                    onClick={() => {
-                      const prompt = `Here is the raw transcript from the meeting for Team ${meeting.teamId}. Please analyze who contributed what, ignoring the lack of speaker attribution by deducing turns based on context:\n\n"""\n${meeting.transcript}\n"""\n\nPlease output leadership scores (0-10) and communication scores (0-10) for each participant.`;
-                      navigator.clipboard.writeText(prompt);
-                      toast.success("Prompt copied to clipboard!");
-                    }}
-                    className="w-full py-2 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/50 text-indigo-300 rounded-lg text-sm font-medium transition-colors"
-                  >
-                    Copy AI Prompt (Manual Review)
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => {
+                        const prompt = `Here is the raw transcript from the meeting for Team ${meeting.teamId}. Please analyze who contributed what, ignoring the lack of speaker attribution by deducing turns based on context:\n\n"""\n${meeting.transcript}\n"""\n\nPlease output leadership scores (0-10) and communication scores (0-10) for each participant.`;
+                        navigator.clipboard.writeText(prompt);
+                        toast.success("Prompt copied to clipboard!");
+                      }}
+                      className="flex-1 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/50 text-indigo-300 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Copy AI Prompt (Manual Review)
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteMeeting(meeting.id)}
+                      className="px-4 py-2 bg-rose-600/20 hover:bg-rose-600/40 border border-rose-500/50 text-rose-300 rounded-lg text-sm font-medium transition-colors"
+                      title="Delete Transcript"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
