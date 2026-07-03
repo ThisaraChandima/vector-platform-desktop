@@ -4,7 +4,6 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import NavBar from '@/components/NavBar';
 import { createClient } from '@supabase/supabase-js';
-import { JitsiMeeting } from '@jitsi/react-sdk';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://example.supabase.co';
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'dummy-key';
@@ -181,26 +180,11 @@ function MeetingContent() {
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Video Area */}
           <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden relative shadow-2xl flex flex-col min-h-[600px]">
-            <JitsiMeeting
-              domain="meet.jit.si"
-              roomName={roomName}
-              configOverwrite={{
-                startWithAudioMuted: false,
-                startWithVideoMuted: false,
-                disableModeratorIndicator: true,
-                startScreenSharing: true,
-                enableEmailInStats: false
-              }}
-              interfaceConfigOverwrite={{
-                DISABLE_JOIN_LEAVE_NOTIFICATIONS: true
-              }}
-              userInfo={{
-                displayName: authUser
-              }}
-              getIFrameRef={(iframeRef) => {
-                iframeRef.style.height = '100%';
-                iframeRef.style.width = '100%';
-              }}
+            <iframe
+              src={`https://p2p.mirotalk.com/join/${roomName}?name=${encodeURIComponent(authUser)}`}
+              allow="camera; microphone; display-capture; fullscreen"
+              className="w-full h-full border-0 flex-1"
+              title="Meeting Space"
             />
           </div>
 
