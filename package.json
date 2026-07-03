@@ -21,7 +21,8 @@
       "dist/**/*",
       "electron/**/*",
       "package.json",
-      ".env"
+      ".env",
+      "node_modules/**/*"
     ],
     "mac": {
       "target": [
