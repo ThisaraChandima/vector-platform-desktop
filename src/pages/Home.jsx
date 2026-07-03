@@ -44,7 +44,7 @@ export default function Home() {
           </Link>
 
           {/* Student Role */}
-          <Link to="/student" className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:bg-slate-800 hover:border-emerald-500/50 transition-all duration-300 text-left overflow-hidden shadow-xl shadow-black/50">
+          <Link to="/select-student" className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:bg-slate-800 hover:border-emerald-500/50 transition-all duration-300 text-left overflow-hidden shadow-xl shadow-black/50">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
               <svg className="w-24 h-24 text-emerald-400 transform translate-x-4 -translate-y-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />

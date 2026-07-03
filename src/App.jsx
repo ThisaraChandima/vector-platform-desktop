@@ -1,6 +1,7 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import StudentSelect from './pages/StudentSelect';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentTasks from './pages/StudentTasks';
 import Meeting from './pages/Meeting';
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/select-student" element={<StudentSelect />} />
         <Route path="/student" element={<StudentDashboard />} />
         <Route path="/student/tasks" element={<StudentTasks />} />
         <Route path="/student/editor" element={<StudentEditor />} />
