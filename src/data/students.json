@@ -1,0 +1,854 @@
+[
+  {
+    "id": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "name": "Kavisha Perera",
+    "email": "kavisha.perera@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": "6ee00f98-d620-4b6e-8e54-7772bb4b2ab5",
+    "profile": {
+      "technicalSkills": {
+        "frontend": 9,
+        "backend": 3,
+        "uiux": 7,
+        "qa": 2,
+        "devops": 1,
+        "mobile": 5,
+        "dataScience": 1
+      },
+      "softSkills": {
+        "leadership": 6,
+        "communication": 8,
+        "problemSolving": 7,
+        "teamwork": 9
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": true,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": false,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": false,
+        "thursdayAfternoon": false,
+        "thursdayEvening": true,
+        "fridayAfternoon": true,
+        "fridayEvening": false,
+        "saturday": false,
+        "sunday": true
+      },
+      "desiredRole": "frontend",
+      "experienceLevel": "advanced"
+    },
+    "vector": [
+      0.9,
+      0.3,
+      0.7,
+      0.2,
+      0.1,
+      0.5,
+      0.1,
+      0.6,
+      0.8,
+      0.7,
+      0.9,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 20,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "85347362-ee2a-4c77-9fa9-236022a43be7",
+    "name": "Nimesh Jayasuriya",
+    "email": "nimesh.jayasuriya@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": "6ee00f98-d620-4b6e-8e54-7772bb4b2ab5",
+    "profile": {
+      "technicalSkills": {
+        "frontend": 8,
+        "backend": 2,
+        "uiux": 6,
+        "qa": 3,
+        "devops": 2,
+        "mobile": 7,
+        "dataScience": 1
+      },
+      "softSkills": {
+        "leadership": 4,
+        "communication": 7,
+        "problemSolving": 6,
+        "teamwork": 8
+      },
+      "availability": {
+        "mondayAfternoon": false,
+        "mondayEvening": true,
+        "tuesdayAfternoon": false,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": false,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": false,
+        "thursdayEvening": true,
+        "fridayAfternoon": false,
+        "fridayEvening": true,
+        "saturday": true,
+        "sunday": false
+      },
+      "desiredRole": "frontend",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.8,
+      0.2,
+      0.6,
+      0.3,
+      0.2,
+      0.7,
+      0.1,
+      0.4,
+      0.7,
+      0.6,
+      0.8,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 15,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "f882c4f7-3923-49b4-8764-f13674b403a8",
+    "name": "Sachini Dissanayake",
+    "email": "sachini.dissanayake@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": "6ee00f98-d620-4b6e-8e54-7772bb4b2ab5",
+    "profile": {
+      "technicalSkills": {
+        "frontend": 8,
+        "backend": 4,
+        "uiux": 8,
+        "qa": 2,
+        "devops": 1,
+        "mobile": 4,
+        "dataScience": 2
+      },
+      "softSkills": {
+        "leadership": 5,
+        "communication": 9,
+        "problemSolving": 7,
+        "teamwork": 8
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": false,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": false,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": true,
+        "thursdayEvening": false,
+        "fridayAfternoon": true,
+        "fridayEvening": false,
+        "saturday": true,
+        "sunday": false
+      },
+      "desiredRole": "uiux",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.8,
+      0.4,
+      0.8,
+      0.2,
+      0.1,
+      0.4,
+      0.2,
+      0.5,
+      0.9,
+      0.7,
+      0.8,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 18,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "fd097f22-ee20-4187-8008-4ebc97b20826",
+    "name": "Dilshan Rathnayake",
+    "email": "dilshan.rathnayake@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": "6ee00f98-d620-4b6e-8e54-7772bb4b2ab5",
+    "profile": {
+      "technicalSkills": {
+        "frontend": 2,
+        "backend": 9,
+        "uiux": 1,
+        "qa": 5,
+        "devops": 6,
+        "mobile": 2,
+        "dataScience": 4
+      },
+      "softSkills": {
+        "leadership": 7,
+        "communication": 6,
+        "problemSolving": 9,
+        "teamwork": 7
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": false,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": false,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": true,
+        "thursdayEvening": false,
+        "fridayAfternoon": true,
+        "fridayEvening": true,
+        "saturday": false,
+        "sunday": false
+      },
+      "desiredRole": "backend",
+      "experienceLevel": "advanced"
+    },
+    "vector": [
+      0.2,
+      0.9,
+      0.1,
+      0.5,
+      0.6,
+      0.2,
+      0.4,
+      0.7,
+      0.6,
+      0.9,
+      0.7,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 25,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "d144ff91-9550-4d6b-95a9-4918746ba80c",
+    "name": "Tharindu Wickramasinghe",
+    "email": "tharindu.wickramasinghe@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 3,
+        "backend": 8,
+        "uiux": 2,
+        "qa": 4,
+        "devops": 5,
+        "mobile": 1,
+        "dataScience": 6
+      },
+      "softSkills": {
+        "leadership": 5,
+        "communication": 5,
+        "problemSolving": 8,
+        "teamwork": 6
+      },
+      "availability": {
+        "mondayAfternoon": false,
+        "mondayEvening": true,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": false,
+        "thursdayAfternoon": false,
+        "thursdayEvening": true,
+        "fridayAfternoon": false,
+        "fridayEvening": false,
+        "saturday": true,
+        "sunday": true
+      },
+      "desiredRole": "backend",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.3,
+      0.8,
+      0.2,
+      0.4,
+      0.5,
+      0.1,
+      0.6,
+      0.5,
+      0.5,
+      0.8,
+      0.6,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 20,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "d5bd850b-ab9a-4916-ada4-de7046e8e633",
+    "name": "Lasantha Fernando",
+    "email": "lasantha.fernando@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 4,
+        "backend": 9,
+        "uiux": 1,
+        "qa": 3,
+        "devops": 7,
+        "mobile": 3,
+        "dataScience": 5
+      },
+      "softSkills": {
+        "leadership": 8,
+        "communication": 7,
+        "problemSolving": 9,
+        "teamwork": 7
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": true,
+        "tuesdayAfternoon": false,
+        "tuesdayEvening": false,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": true,
+        "thursdayEvening": true,
+        "fridayAfternoon": false,
+        "fridayEvening": false,
+        "saturday": false,
+        "sunday": true
+      },
+      "desiredRole": "backend",
+      "experienceLevel": "advanced"
+    },
+    "vector": [
+      0.4,
+      0.9,
+      0.1,
+      0.3,
+      0.7,
+      0.3,
+      0.5,
+      0.8,
+      0.7,
+      0.9,
+      0.7,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 22,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "f6d45349-1846-4df3-b8fd-254c005bfc7f",
+    "name": "Amaya Senanayake",
+    "email": "amaya.senanayake@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 6,
+        "backend": 1,
+        "uiux": 9,
+        "qa": 2,
+        "devops": 1,
+        "mobile": 4,
+        "dataScience": 1
+      },
+      "softSkills": {
+        "leadership": 5,
+        "communication": 9,
+        "problemSolving": 7,
+        "teamwork": 8
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": true,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": false,
+        "wednesdayEvening": false,
+        "thursdayAfternoon": true,
+        "thursdayEvening": false,
+        "fridayAfternoon": true,
+        "fridayEvening": false,
+        "saturday": true,
+        "sunday": false
+      },
+      "desiredRole": "uiux",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.6,
+      0.1,
+      0.9,
+      0.2,
+      0.1,
+      0.4,
+      0.1,
+      0.5,
+      0.9,
+      0.7,
+      0.8,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 16,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.141Z"
+  },
+  {
+    "id": "cd3f830b-d44e-44e6-b8fd-32279b0e477c",
+    "name": "Hiruni Kularatne",
+    "email": "hiruni.kularatne@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 7,
+        "backend": 2,
+        "uiux": 8,
+        "qa": 3,
+        "devops": 1,
+        "mobile": 5,
+        "dataScience": 2
+      },
+      "softSkills": {
+        "leadership": 4,
+        "communication": 8,
+        "problemSolving": 6,
+        "teamwork": 9
+      },
+      "availability": {
+        "mondayAfternoon": false,
+        "mondayEvening": false,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": false,
+        "thursdayEvening": true,
+        "fridayAfternoon": true,
+        "fridayEvening": true,
+        "saturday": false,
+        "sunday": false
+      },
+      "desiredRole": "uiux",
+      "experienceLevel": "beginner"
+    },
+    "vector": [
+      0.7,
+      0.2,
+      0.8,
+      0.3,
+      0.1,
+      0.5,
+      0.2,
+      0.4,
+      0.8,
+      0.6,
+      0.9,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 14,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.142Z"
+  },
+  {
+    "id": "1c6f5dac-6e0f-4365-8e62-49695f703baa",
+    "name": "Ruwan Amarasinghe",
+    "email": "ruwan.amarasinghe@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 4,
+        "backend": 4,
+        "uiux": 2,
+        "qa": 9,
+        "devops": 5,
+        "mobile": 2,
+        "dataScience": 3
+      },
+      "softSkills": {
+        "leadership": 6,
+        "communication": 6,
+        "problemSolving": 8,
+        "teamwork": 7
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": false,
+        "tuesdayAfternoon": false,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": false,
+        "thursdayEvening": false,
+        "fridayAfternoon": true,
+        "fridayEvening": true,
+        "saturday": true,
+        "sunday": false
+      },
+      "desiredRole": "qa",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.4,
+      0.4,
+      0.2,
+      0.9,
+      0.5,
+      0.2,
+      0.3,
+      0.6,
+      0.6,
+      0.8,
+      0.7,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 18,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.142Z"
+  },
+  {
+    "id": "362bac29-1827-49e0-9ea2-f440d3ade3db",
+    "name": "Buddhika Madushanka",
+    "email": "buddhika.madushanka@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 2,
+        "backend": 6,
+        "uiux": 1,
+        "qa": 5,
+        "devops": 9,
+        "mobile": 1,
+        "dataScience": 4
+      },
+      "softSkills": {
+        "leadership": 5,
+        "communication": 5,
+        "problemSolving": 9,
+        "teamwork": 6
+      },
+      "availability": {
+        "mondayAfternoon": false,
+        "mondayEvening": true,
+        "tuesdayAfternoon": false,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": false,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": false,
+        "thursdayEvening": true,
+        "fridayAfternoon": false,
+        "fridayEvening": true,
+        "saturday": true,
+        "sunday": true
+      },
+      "desiredRole": "devops",
+      "experienceLevel": "advanced"
+    },
+    "vector": [
+      0.2,
+      0.6,
+      0.1,
+      0.5,
+      0.9,
+      0.1,
+      0.4,
+      0.5,
+      0.5,
+      0.9,
+      0.6,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 20,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.142Z"
+  },
+  {
+    "id": "b8f4ae75-8b37-435f-821e-6cc50d067475",
+    "name": "Chathurika Pathirana",
+    "email": "chathurika.pathirana@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 6,
+        "backend": 6,
+        "uiux": 5,
+        "qa": 5,
+        "devops": 4,
+        "mobile": 6,
+        "dataScience": 5
+      },
+      "softSkills": {
+        "leadership": 7,
+        "communication": 7,
+        "problemSolving": 7,
+        "teamwork": 7
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": true,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": false,
+        "wednesdayAfternoon": true,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": true,
+        "thursdayEvening": false,
+        "fridayAfternoon": true,
+        "fridayEvening": false,
+        "saturday": false,
+        "sunday": false
+      },
+      "desiredRole": "fullstack",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.6,
+      0.6,
+      0.5,
+      0.5,
+      0.4,
+      0.6,
+      0.5,
+      0.7,
+      0.7,
+      0.7,
+      0.7,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 20,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.142Z"
+  },
+  {
+    "id": "594e6fd0-58bc-47e9-8faa-50a5d546a022",
+    "name": "Supun Karunarathne",
+    "email": "supun.karunarathne@uni.lk",
+    "role": "student",
+    "onboardingComplete": true,
+    "teamId": null,
+    "profile": {
+      "technicalSkills": {
+        "frontend": 5,
+        "backend": 5,
+        "uiux": 4,
+        "qa": 6,
+        "devops": 3,
+        "mobile": 5,
+        "dataScience": 7
+      },
+      "softSkills": {
+        "leadership": 9,
+        "communication": 8,
+        "problemSolving": 8,
+        "teamwork": 8
+      },
+      "availability": {
+        "mondayAfternoon": true,
+        "mondayEvening": false,
+        "tuesdayAfternoon": true,
+        "tuesdayEvening": true,
+        "wednesdayAfternoon": false,
+        "wednesdayEvening": true,
+        "thursdayAfternoon": true,
+        "thursdayEvening": true,
+        "fridayAfternoon": false,
+        "fridayEvening": false,
+        "saturday": true,
+        "sunday": true
+      },
+      "desiredRole": "manager",
+      "experienceLevel": "intermediate"
+    },
+    "vector": [
+      0.5,
+      0.5,
+      0.4,
+      0.6,
+      0.3,
+      0.5,
+      0.7,
+      0.9,
+      0.8,
+      0.8,
+      0.8,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+    ],
+    "capacityTokens": {
+      "maxWeeklyHours": 22,
+      "currentActiveHours": 0,
+      "taskHistory": []
+    },
+    "peerValidationScore": null,
+    "inflationFlag": false,
+    "createdAt": "2026-06-25T12:58:19.142Z"
+  }
+]

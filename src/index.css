@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Monaco Remote Cursors */
+.remote-cursor-student1 { border-left: 2px solid #ef4444 !important; position: relative !important; z-index: 50 !important; }
+.remote-cursor-student1::before { content: "student1"; position: absolute; top: 100%; left: 0px; background: #ef4444; color: white; font-size: 10px; padding: 0px 4px; line-height: 14px; border-radius: 0px 4px 4px 4px; pointer-events: none; white-space: nowrap; }
+
+.remote-cursor-student2 { border-left: 2px solid #3b82f6 !important; position: relative !important; z-index: 50 !important; }
+.remote-cursor-student2::before { content: "student2"; position: absolute; top: 100%; left: 0px; background: #3b82f6; color: white; font-size: 10px; padding: 0px 4px; line-height: 14px; border-radius: 0px 4px 4px 4px; pointer-events: none; white-space: nowrap; }
+
+.remote-cursor-student3 { border-left: 2px solid #10b981 !important; position: relative !important; z-index: 50 !important; }
+.remote-cursor-student3::before { content: "student3"; position: absolute; top: 100%; left: 0px; background: #10b981; color: white; font-size: 10px; padding: 0px 4px; line-height: 14px; border-radius: 0px 4px 4px 4px; pointer-events: none; white-space: nowrap; }
+
+.remote-cursor-student4 { border-left: 2px solid #f59e0b !important; position: relative !important; z-index: 50 !important; }
+.remote-cursor-student4::before { content: "student4"; position: absolute; top: 100%; left: 0px; background: #f59e0b; color: white; font-size: 10px; padding: 0px 4px; line-height: 14px; border-radius: 0px 4px 4px 4px; pointer-events: none; white-space: nowrap; }

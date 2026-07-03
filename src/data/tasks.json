@@ -1,0 +1,72 @@
+[
+  {
+    "id": "16eee24c-3fdf-448e-8273-9e762e1dd33e",
+    "title": "Design System & Component Library",
+    "description": "Create a reusable Tailwind-based design system with tokens, typography scale, color palette, button variants, form elements, and card components. Export as a shared Figma file and CSS variables.",
+    "teamId": null,
+    "assignedTo": null,
+    "complexityWeight": 7,
+    "estimatedHours": 12,
+    "status": "unassigned",
+    "transferLog": [],
+    "createdBy": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "createdAt": "2026-06-25T12:58:19.152Z",
+    "completedAt": null
+  },
+  {
+    "id": "2250f250-6878-43b8-a018-fc4608795828",
+    "title": "User Authentication & Role Management",
+    "description": "Implement JWT-based authentication with register, login, password reset, and role-based route guards (admin, student, faculty). Include rate limiting and secure cookie storage.",
+    "teamId": null,
+    "assignedTo": null,
+    "complexityWeight": 8,
+    "estimatedHours": 16,
+    "status": "unassigned",
+    "transferLog": [],
+    "createdBy": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "createdAt": "2026-06-25T12:58:19.152Z",
+    "completedAt": null
+  },
+  {
+    "id": "94b4f262-e467-44d5-bf13-dcccfd34e406",
+    "title": "Database Schema Design & ERD",
+    "description": "Design the full relational database schema covering all entities. Create ERD diagram, write migration scripts, add seed data for testing, and document all relationships and constraints.",
+    "teamId": null,
+    "assignedTo": null,
+    "complexityWeight": 5,
+    "estimatedHours": 8,
+    "status": "unassigned",
+    "transferLog": [],
+    "createdBy": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "createdAt": "2026-06-25T12:58:19.152Z",
+    "completedAt": null
+  },
+  {
+    "id": "f59332eb-5124-440c-9ca1-9281e71d390b",
+    "title": "REST API Integration & Testing",
+    "description": "Integrate all third-party APIs (payment gateway, SMS notifications, email service). Write integration tests with 80%+ coverage using Jest. Document all endpoints in Postman.",
+    "teamId": null,
+    "assignedTo": null,
+    "complexityWeight": 9,
+    "estimatedHours": 20,
+    "status": "unassigned",
+    "transferLog": [],
+    "createdBy": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "createdAt": "2026-06-25T12:58:19.152Z",
+    "completedAt": null
+  },
+  {
+    "id": "a11082b2-0aa6-4ae7-ac84-7523e15d9532",
+    "title": "Deployment Pipeline & CI/CD Setup",
+    "description": "Configure GitHub Actions workflow for automated testing, Docker containerization, and deployment to a cloud provider. Include staging and production environments with environment variable management.",
+    "teamId": null,
+    "assignedTo": null,
+    "complexityWeight": 8,
+    "estimatedHours": 14,
+    "status": "unassigned",
+    "transferLog": [],
+    "createdBy": "c38a161a-5106-4699-8a35-d39fa54be871",
+    "createdAt": "2026-06-25T12:58:19.152Z",
+    "completedAt": null
+  }
+]
