@@ -8,10 +8,11 @@ import os from 'os';
 import Groq from 'groq-sdk';
 import dotenv from 'dotenv';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load .env explicitly from the app root
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 let mainWindow;
 
