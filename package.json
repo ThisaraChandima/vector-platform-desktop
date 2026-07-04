@@ -45,6 +45,12 @@
           ]
         }
       ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "tar.gz"
+      ]
     }
   },
   "scripts": {
