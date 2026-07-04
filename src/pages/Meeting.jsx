@@ -17,11 +17,33 @@ function MeetingContent() {
   const [searchParams] = useSearchParams();
   const meetingName = searchParams.get('name') || 'Team Meeting';
   const isHost = searchParams.get('host') === 'true';
-  const authUser = localStorage.getItem('auth_user') || 'Current User';
+  const authUserRaw = localStorage.getItem('auth_user') || '';
 
+  const [studentName, setStudentName] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+
+  // Fetch the real student name from the API
+  useEffect(() => {
+    async function fetchStudentName() {
+      try {
+        const res = await fetch('https://vector-platform-two.vercel.app/api/students');
+        const data = await res.json();
+        let found = null;
+        if (authUserRaw && authUserRaw.startsWith('student')) {
+          const num = parseInt(authUserRaw.replace('student', ''), 10) - 1;
+          found = data.data[num];
+        } else if (authUserRaw) {
+          found = data.data.find(s => s.id === authUserRaw);
+        }
+        setStudentName(found?.name || authUserRaw || 'Guest');
+      } catch {
+        setStudentName(authUserRaw || 'Guest');
+      }
+    }
+    fetchStudentName();
+  }, [authUserRaw]);
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -146,7 +168,7 @@ function MeetingContent() {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col font-sans">
-      <NavBar role="student" user={{ name: authUser }} />
+      <NavBar role="student" user={{ name: studentName || 'Loading...' }} />
       
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
         <div className="mb-6 flex justify-between items-center">
@@ -181,7 +203,7 @@ function MeetingContent() {
           {/* Main Video Area */}
           <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden relative shadow-2xl flex flex-col min-h-[600px]">
             <iframe
-              src={`https://p2p.mirotalk.com/join/${roomName}?name=${encodeURIComponent(authUser)}`}
+              src={studentName ? `https://p2p.mirotalk.com/join/${roomName}?name=${encodeURIComponent(studentName)}` : 'about:blank'}
               allow="camera; microphone; display-capture; fullscreen"
               className="w-full h-full border-0 flex-1"
               title="Meeting Space"
